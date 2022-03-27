@@ -123,5 +123,5 @@ export default fn(async () => {
     return { cryptoPools, tvl };
 
 }, {
-  maxAge: 15 * 60, // 15 min
+  maxAge: 0,
 });

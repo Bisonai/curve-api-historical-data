@@ -85,7 +85,7 @@ const getYcTokenPrices = memoize(async (networkSettingsParam) => {
   return ycTokensPrices;
 }, {
   promise: true,
-  maxAge: 10 * 60 * 1000, // 10 min
+  maxAge: 0,
 });
 
 export default getYcTokenPrices;

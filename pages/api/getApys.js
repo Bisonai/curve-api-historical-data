@@ -31,5 +31,5 @@ export default fn(async ({ address }) => {
     crvPrice,
   }]));
 }, {
-  maxAge: 10 * 60, // 10m
+  maxAge: 0,
 });

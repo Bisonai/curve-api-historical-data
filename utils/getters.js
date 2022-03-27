@@ -27,7 +27,7 @@ const getRegistry = memoize(async ({ blockchainId } = {}) => {
   return contract.methods.get_registry().call();
 }, {
   promise: true,
-  maxAge: 10 * 60 * 1000, // 10 min
+  maxAge: 0,
   normalizer: ([{ blockchainId } = {}]) => blockchainId,
 });
 
@@ -74,7 +74,7 @@ const getFactoryRegistry = memoize(async () => {
   //return contract.methods.get_address(3).call();
 }, {
   promise: true,
-  maxAge: 10 * 60 * 1000, // 10 min
+  maxAge: 0,
 });
 
 const getFeeDistributor = async () => {

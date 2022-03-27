@@ -41,7 +41,7 @@ const getTokensPrices = memoize(async (addresses, platform = 'ethereum') => {
   return mergedPrices;
 }, {
   promise: true,
-  maxAge: 2 * 60 * 1000, // 2 min
+  maxAge: 0,
   primitive: true,
 });
 

@@ -11,7 +11,7 @@ const getRefAssetPrice = memoize(async (refAsset) => {
   return prices[referenceAssetCoingeckoId];
 }, {
   promise: true,
-  maxAge: 10 * 1000, // 10s
+  maxAge: 0,
 });
 
 export default getRefAssetPrice;

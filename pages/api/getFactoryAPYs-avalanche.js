@@ -133,5 +133,5 @@ export default fn(async (query) => {
     return { poolDetails, totalVolume, latest };
 
 }, {
-  maxAge: 30, // 30s
+  maxAge: 0, 
 });

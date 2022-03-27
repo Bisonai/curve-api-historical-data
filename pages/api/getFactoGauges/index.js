@@ -174,5 +174,5 @@ export default fn(async ({ blockchainId }) => {
     gauges
   };
 }, {
-  maxAge: 60,
+  maxAge: 0,
 });

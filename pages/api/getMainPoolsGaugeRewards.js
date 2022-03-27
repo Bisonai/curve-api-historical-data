@@ -347,5 +347,5 @@ export default fn(async () => {
 
   return { mainPoolsGaugeRewards: groupBy(mergedRewardsInfo, 'gaugeAddress') };
 }, {
-  maxAge: 5 * 60, // 5 min
+  maxAge: 0,
 });

@@ -148,6 +148,6 @@ export default memoize(async (blockchainId) => {
   return groupBy(rewardsInfo, 'gaugeAddress');
 }, {
   promise: true,
-  maxAge: 2 * 60 * 1000, // 2 min
+  maxAge: 0,
   primitive: true,
 });

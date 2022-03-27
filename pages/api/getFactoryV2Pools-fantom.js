@@ -9,5 +9,5 @@ import getFactoryV2PoolsApiFn from './getFactoryV2Pools/index';
 export default fn(async () => (
   getFactoryV2PoolsApiFn.straightCall({ blockchainId: 'fantom' })
 ), {
-  maxAge: 60,
+  maxAge: 0,
 });

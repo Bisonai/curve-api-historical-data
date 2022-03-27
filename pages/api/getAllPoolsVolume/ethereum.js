@@ -58,5 +58,5 @@ export default fn(async () => {
     totalVolume,
   };
 }, {
-  maxAge: 10 * 60, // 10m
+  maxAge: 0,
 });

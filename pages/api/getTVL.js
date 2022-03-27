@@ -219,5 +219,5 @@ export default fn(async () => {
     return { tvl, usdTVL, ethTVL, btcTVL, eurTVL, otherTVL, allPools, sideTVLs, sideChainTVL };
 
 }, {
-  maxAge: 15 * 60, // 15 min
+  maxAge: 0,
 });

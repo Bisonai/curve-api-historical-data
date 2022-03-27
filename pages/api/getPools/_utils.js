@@ -11,7 +11,7 @@ const getMainRegistryPools = memoize(async (blockchainId) => (
   (await (await Request.get(`${BASE_API_DOMAIN}/api/getPools/${blockchainId}/main`)).json()).data.poolData
 ), {
   promise: true,
-  maxAge: 60 * 60 * 1000, // 1h
+  maxAge: 0,
 });
 
 /**
