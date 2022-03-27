@@ -35,14 +35,17 @@ export default fn(async (query) => {
 
     let poolDetails = [];
     let totalVolume = 0
-
-    const latest = await web3.eth.getBlockNumber();
-
+    const latest_block = query?.block;
+    let latest = await web3.eth.getBlockNumber();
+    if(latest_block && latest_block<=latest){
+      latest = latest_block;
+    }
     await Promise.all(
       res.data.poolData.map(async (pool, index) => {
 
           let poolContract = new web3.eth.Contract(factorypool3Abi, pool.address)
-          let DAY_BLOCKS = 6550
+          let DAY_BLOCKS = 6550;
+          latest = Math.max(latest, DAY_BLOCKS*7);
 
           const testPool = pool.address
           const eventName = 'TokenExchangeUnderlying';
@@ -64,7 +67,7 @@ export default fn(async (query) => {
 
           let vPriceFetch = 1 * (10 ** 18)
           try {
-            vPriceFetch = await poolContract.methods.get_virtual_price().call()
+            vPriceFetch = await poolContract.methods.get_virtual_price().call('', latest);
           } catch (e) {
             vPriceFetch = 1 * (10 ** 18)
           }
@@ -87,7 +90,6 @@ export default fn(async (query) => {
                 cryptoPoolContract.methods.xcp_profit().call('', latest - DAY_BLOCKS),
                 cryptoPoolContract.methods.xcp_profit_a().call('', latest - DAY_BLOCKS),
               ]);
-
               const currentProfit = ((currentXcpProfit / 2) + (currentXcpProfitA / 2) + 1e18) / 2;
               const dayOldProfit = ((dayOldXcpProfit / 2) + (dayOldXcpProfitA / 2) + 1e18) / 2;
 
@@ -140,7 +142,7 @@ export default fn(async (query) => {
           let events = await poolContract.getPastEvents(eventName, {
               filter: {}, // Using an array means OR: e.g. 20 or 23
               fromBlock: latest - DAY_BLOCKS,
-              toBlock: 'latest'
+              toBlock: latest
           })
           events.map(async (trade) => {
 
@@ -157,7 +159,7 @@ export default fn(async (query) => {
             let events2 = await poolContract.getPastEvents(eventName2, {
                 filter: {}, // Using an array means OR: e.g. 20 or 23
                 fromBlock: latest - DAY_BLOCKS,
-                toBlock: 'latest'
+                toBlock: latest
             })
 
             events2.map(async (trade) => {
@@ -185,7 +187,7 @@ export default fn(async (query) => {
                 filter: {},
                 topics: ['0xb2e76ae99761dc136e598d4a629bb347eccb9532a5f8bbd72e18467c3c34cc98'],
                 fromBlock: latest - DAY_BLOCKS,
-                toBlock: 'latest'
+                toBlock: latest
             })
             events3.map(async (trade) => {
               const {
@@ -231,5 +233,5 @@ export default fn(async (query) => {
     return { poolDetails, totalVolume };
 
 }, {
-  maxAge: 30, // 30s
+  maxAge: 0,
 });

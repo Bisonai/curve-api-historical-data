@@ -63,5 +63,5 @@ export default fn(async () => {
     return { weeklyFeesTable, totalFees };
 
 }, {
-  maxAge: 15 * 60, // 15 min
+  maxAge: 0,
 });

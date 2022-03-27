@@ -28,5 +28,5 @@ export default fn(async () => {
   return { poolList  };
 
 }, {
-  maxAge: 3600, // 1 hour
+  maxAge: 0,
 });

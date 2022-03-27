@@ -2,7 +2,7 @@ import axios from 'axios';
 import Web3 from 'web3';
 import BigNumber from 'big-number';
 import WEB3_CONSTANTS from 'constants/Web3';
-
+import moment from 'moment';
 import { fn } from '../../utils/api';
 import { getRegistry, getMultiCall } from '../../utils/getters';
 import registryAbi from '../../constants/abis/registry.json';
@@ -12,7 +12,7 @@ import erc20Abi from '../../constants/abis/erc20.json';
 const web3 = new Web3(WEB3_CONSTANTS.RPC_URL);
 
 
-export default fn(async () => {
+export default fn(async (query) => {
 
     const LP_TOKEN_DECIMALS = 18;
 
@@ -55,13 +55,29 @@ export default fn(async () => {
       '0xa96a65c051bf88b4095ee1f2451c2a9d43f53ae2': 'ethereum', //ankreth
       '0xf178c0b5bb7e7abf4e12a4838c7b7c5ba2c623c0': 'chainlink', //chainlink
     };
-
-    let price_feed = await (await fetch('https://api.coingecko.com/api/v3/simple/price?ids=stasis-eurs,ethereum,bitcoin,curve-dao-token,chainlink&vs_currencies=usd')).json()
+    const tokenList = ["curve-dao-token", "ethereum", "chainlink", "bitcoin", "stasis-eurs"];
+    let price_feed = tokenList.reduce((result, token) => ({...result, [token]:{usd: 0}}), {});
+    const latest_block = query?.block;
+    let latest = await web3.eth.getBlockNumber();
+    if (latest_block && latest_block <= latest) {
+      latest = latest_block;
+      const block = await web3.eth.getBlock(latest_block);
+    
+      let date = moment(block.timestamp*1000).format('DD-MM-YYYY');
+      await Promise.all(
+        tokenList.map(async (token)=>{
+          const result = await (await fetch(`https://api.coingecko.com/api/v3/coins/${token}/history?date=${date}`)).json();
+          price_feed[token].usd = result?.market_data?.current_price?.usd || 0;
+        })
+      )
+    }else{
+      price_feed = await (await fetch('https://api.coingecko.com/api/v3/simple/price?ids=stasis-eurs,ethereum,bitcoin,curve-dao-token,chainlink&vs_currencies=usd')).json()
+    }
 
     let registryAddress = await getRegistry()
     let multicallAddress = await getMultiCall()
   	let registry = new web3.eth.Contract(registryAbi, registryAddress);
-  	let poolCount = await registry.methods.pool_count().call();
+  	let poolCount = await registry.methods.pool_count().call('', latest);
   	let multicall = new web3.eth.Contract(multicallAbi, multicallAddress)
 
   	//get pool addresses
@@ -69,7 +85,7 @@ export default fn(async () => {
   	for (var i = 0; i < poolCount; i++) {
   		calls.push([registryAddress, registry.methods.pool_list(i).encodeABI()])
   	}
-  	let aggcalls = await multicall.methods.aggregate(calls).call()
+  	let aggcalls = await multicall.methods.aggregate(calls).call('', latest)
   	let poolList = aggcalls[1].map(hex => web3.eth.abi.decodeParameter('address', hex))
 
     calls = []
@@ -79,7 +95,7 @@ export default fn(async () => {
       calls.push([registryAddress, registry.methods.get_lp_token(pool_address).encodeABI()])
     })
 
-    aggcalls = await multicall.methods.aggregate(calls).call()
+    aggcalls = await multicall.methods.aggregate(calls).call('', latest)
     aggcalls = aggcalls[1]
 
 
@@ -120,7 +136,7 @@ export default fn(async () => {
       calls.push([pool.coin, '0x313ce567']) //decimals
     })
 
-    aggcalls = await multicall.methods.aggregate(calls).call()
+    aggcalls = await multicall.methods.aggregate(calls).call('', latest)
     aggcalls = aggcalls[1]
 
     //we count tvl for metapools
@@ -136,7 +152,7 @@ export default fn(async () => {
       calls.push([pool.lptoken, '0x18160ddd']) //get virtual price
     })
 
-    aggcalls = await multicall.methods.aggregate(calls).call()
+    aggcalls = await multicall.methods.aggregate(calls).call('', latest)
     aggcalls = aggcalls[1]
 
     poolIndex = 0;
@@ -191,7 +207,7 @@ export default fn(async () => {
     })
 
 
-
+    
     let sideTVLs = []
     let endPoints = [
       'getTVLPolygon',
@@ -219,5 +235,5 @@ export default fn(async () => {
     return { tvl, usdTVL, ethTVL, btcTVL, eurTVL, otherTVL, allPools, sideTVLs, sideChainTVL };
 
 }, {
-  maxAge: 15 * 60, // 15 min
+  maxAge: 0,
 });

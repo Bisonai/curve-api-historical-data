@@ -126,5 +126,5 @@ export default fn(async ( {blockchainId} ) => {
 
   return { poolList, totalVolume }
 }, {
-  maxAge: 5 * 60, // 15 min
+  maxAge: 0,
 });

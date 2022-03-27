@@ -93,5 +93,5 @@ export default fn(async () => {
 
 
 }, {
-  maxAge: 15 * 60, // 15 min
+  maxAge: 0,
 });

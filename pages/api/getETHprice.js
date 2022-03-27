@@ -27,5 +27,5 @@ export default fn(async () => {
   }
   return { price };
 }, {
-  maxAge: 20,
+  maxAge: 0,
 });

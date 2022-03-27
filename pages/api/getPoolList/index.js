@@ -72,5 +72,5 @@ export default fn(async ({blockchainId}) => {
 
 
 }, {
-  maxAge: 5 * 60, // 15 min
+  maxAge: 0,
 });

@@ -91,7 +91,7 @@ const getCRVAPY = memoize(async (userAddress) => {
   };
 }, {
   promise: true,
-  maxAge: 10 * 60 * 1000, // 10m
+  maxAge: 0,
 });
 
 export default getCRVAPY;

@@ -69,7 +69,7 @@ const getAPY = memoize(async () => {
   };
 }, {
   promise: true,
-  maxAge: 10 * 60 * 1000, // 10m
+  maxAge: 0,
 });
 
 export default getAPY;

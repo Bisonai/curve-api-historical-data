@@ -18,7 +18,7 @@ const getBlocknativeData = memoize(async () => {
   ];
 }, {
   promise: true,
-  maxAge: 6 * 1000, // Rate limit is 1/5s
+  maxAge: 0,
 });
 
 export default fn(async () => {
@@ -56,5 +56,5 @@ export default fn(async () => {
     eip1559Gas,
   };
 }, {
-  maxAge: 30,
+  maxAge: 0,
 });

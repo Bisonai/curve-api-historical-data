@@ -13,7 +13,7 @@ const getAaveMarketData = memoize(async () => (
   (await Request.get('https://aave-api-v2.aave.com/data/markets-data/0xb53c1a33016b2dc2ff3653530bff1848a515c8c5')).json()
 ), {
   promise: true,
-  maxAge: 10 * 60 * 1000, // 10 min
+  maxAge: 0,
 });
 
 const getAavePoolRewardsInfo = memoize(async (gaugesRewardData, CUSTOM_LOGIC_REWARD_CONTRACTS) => {
@@ -64,7 +64,7 @@ const getAavePoolRewardsInfo = memoize(async (gaugesRewardData, CUSTOM_LOGIC_REW
   });
 }, {
   promise: true,
-  maxAge: 5 * 60 * 1000, // 5 min
+  maxAge: 0,
 });
 
 export default getAavePoolRewardsInfo;

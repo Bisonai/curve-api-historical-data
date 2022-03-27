@@ -24,7 +24,7 @@ const fn = (cb, options = {}) => {
   const callback = maxAgeSec !== null ?
     memoize(async (query) => addGeneratedTime(cb(query)), {
       promise: true,
-      maxAge: maxAgeSec * 1000,
+      maxAge: 0,
       normalizer: ([query]) => JSON.stringify(query), // Separate cache entries for each route & query params,
     }) :
     async (query) => addGeneratedTime(cb(query));
@@ -32,7 +32,7 @@ const fn = (cb, options = {}) => {
   const apiCall = async (req, res) => (
     Promise.resolve(callback(req.query))
       .then((data) => {
-        if (maxAgeSec !== null) res.setHeader('Cache-Control', `max-age=0, s-maxage=${maxAgeSec}, stale-while-revalidate`);
+        if (maxAgeSec !== null) res.setHeader('Cache-Control', `max-age=0, s-maxage=0, stale-while-revalidate`);
         res.status(200).json(formatJsonSuccess(data));
       })
       .catch((err) => {

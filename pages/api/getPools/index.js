@@ -649,5 +649,5 @@ export default fn(async ({ blockchainId, registryId }) => {
     } : {}),
   };
 }, {
-  maxAge: 60,
+  maxAge: 0,
 });

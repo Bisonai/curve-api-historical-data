@@ -4,5 +4,5 @@ import getPoolsFn from 'pages/api/getPools';
 export default fn(async ({ blockchainId }) => (
   getPoolsFn.straightCall({ blockchainId, registryId: 'factory-crypto' })
 ), {
-  maxAge: 60,
+  maxAge: 0,
 });
