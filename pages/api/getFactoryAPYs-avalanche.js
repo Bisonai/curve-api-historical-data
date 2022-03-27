@@ -26,9 +26,14 @@ export default fn(async (query) => {
     let poolDetails = [];
     let totalVolume = 0
 
-    const latest = await web3.eth.getBlockNumber()
+    const latest_block = query?.block;
+    let latest = await web3.eth.getBlockNumber()
+    if(latest_block && latest_block<=latest){
+      latest = latest_block;
+    }
     const DAY_BLOCKS_24H = config.approxBlocksPerDay;
     let DAY_BLOCKS = 2048
+    latest = Math.max(latest, DAY_BLOCKS);
 
     await Promise.all(
       res.data.poolData.map(async (pool, index) => {
@@ -106,7 +111,7 @@ export default fn(async (query) => {
 
           let vPriceFetch
           try {
-            vPriceFetch = await poolContract.methods.get_virtual_price().call()
+            vPriceFetch = await poolContract.methods.get_virtual_price().call('', latest)
           } catch (e) {
             vPriceFetch = 1 * (10 ** 18)
           }
