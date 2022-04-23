@@ -220,7 +220,7 @@ export default fn(async (query) => {
     let sideChainTVL = 0
     await Promise.all(
       endPoints.map(async (endPoint) => {
-        let res = await (await fetch(`http://localhost:3000/api/${endPoint}${latest_block?`?block=${latest_block}`:null}`)).json()
+        let res = await (await fetch(`https://api.curve.fi/api/${endPoint}`)).json()
         let sideChain  = {
           'chain': endPoint.replace('getTVL', ''),
           'tvl': parseFloat(res.data.tvl)
