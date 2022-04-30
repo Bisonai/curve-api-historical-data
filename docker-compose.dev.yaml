@@ -8,7 +8,7 @@ services:
     container_name: curve_api_dev
     hostname: curve_api_dev
     environment:
-      - NFURA_API_KEY
+      - INFURA_API_KEY
       - NODE_ENV
       - ALCHEMY_API_KEY_POLYGON
       - ALCHEMY_API_KEY_ETHEREUM
