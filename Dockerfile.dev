@@ -1,0 +1,16 @@
+FROM node:16.11.1-alpine3.14
+
+RUN apk add --no-cache libc6-compat curl
+
+RUN npm i -g npm
+
+WORKDIR /app
+
+COPY package.json .
+COPY package-lock.json .
+
+RUN npm install --no-optional
+
+COPY / .
+
+CMD [ "npm", "run", "dev" ]
