@@ -9,13 +9,12 @@ services:
     hostname: curve_api_prod
     environment:
       - INFURA_API_KEY
-      - NODE_ENV
       - ALCHEMY_API_KEY_POLYGON
       - ALCHEMY_API_KEY_ETHEREUM
       - ALCHEMY_API_KEY_ARBITRUM
       - ALCHEMY_API_KEY_OPTIMISM
       - BLOCKNATIVE_API_KEY
     expose:
-      - 3000 
+      - 3000
     ports:
       - "3000:3000"
