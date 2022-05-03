@@ -8,11 +8,11 @@ This API is used by various services to serve data. It is a public API intended 
 
 ## **How to run it ?**
 
-### 1. Install `docker` and `docker-compose`.
+1. Install `docker` and `docker-compose`.
 
-### 2. Build: `docker-compose -f docker-compose.{dev|prod}.yaml build`
+2. Build: `docker-compose -f docker-compose.{dev|prod}.yaml build`
 
-### 3. Run: `docker-compose -f docker-compose.{dev|prod}.yaml --env-file .env up `
+3. Run: `docker-compose -f docker-compose.{dev|prod}.yaml --env-file .env up `
 
 ### You can choose between **dev** and **prod**.
 
