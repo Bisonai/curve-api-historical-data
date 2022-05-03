@@ -8,8 +8,8 @@ services:
     container_name: curve_api_dev
     hostname: curve_api_dev
     environment:
+      - NODE_ENV=development
       - INFURA_API_KEY
-      - NODE_ENV
       - ALCHEMY_API_KEY_POLYGON
       - ALCHEMY_API_KEY_ETHEREUM
       - ALCHEMY_API_KEY_ARBITRUM
@@ -23,6 +23,6 @@ services:
       - ./utils:/app/utils
       - ./constants:/app/constants
     expose:
-      - 3000 
+      - 3000
     ports:
       - "3000:3000"
