@@ -1,32 +1,31 @@
 # Curve API
 
+This repository is from this [curvefi repo](https://github.com/curvefi/curve-api) which is an API for the curve finance.<br/>The reason we modify this API is to get historical data.
+
 This API is used by various services to serve data. It is a public API intended for all those seeking to integrate Curve data onto their own projects.
 
-## [Status / Uptime monitoring](https://statuspage.freshping.io/59335-CurveAPI)
+---
 
-## [Changelog](https://github.com/curvefi/curve-api/blob/main/CHANGELOG.md)
+## **How to run it ?**
 
-## Public REST API Endpoints
+### 1. Install `docker` and `docker-compose`.
 
-Endpoints list and example response can be found by **[clicking here](https://github.com/curvefi/curve-api/blob/main/endpoints.md)**
+### 2. Build: `docker-compose -f docker-compose.{dev|prod}.yaml build`
 
-## How to add a new endpoint
+### 3. Run: `docker-compose -f docker-compose.{dev|prod}.yaml --env-file .env up `
 
-1. Create a new file under `/pages/api`: the endpoint will be accessible through the same path, e.g. `/pages/api/hithere` would accessible through `api.curve.fi/api/hithere`
-2. If this endpoint requires passing any data as a query parameter, name that parameter in the path itself (e.g. `/pages/api/user/[id].js`)
-3. The endpoint script must export a function, wrapped in the utility `fn()`, that returns a json object – that's it
-4. **Query params:** any query params defined as in (2) are accessible in the first argument passed to `fn`, e.g. `fn(({ id }) => ({ message: \`Id passed as argument: ${id}\`}))`
-5. **Caching:** pass an object as second argument to `fn`, and set the cache duration in seconds with the `maxAge` property: `{ maxAge: 60 }`
+### You can choose between **dev** and **prod**.
 
-## Dev
-
-Run: `vercel dev`
+---
 
 ## **Historical Data**
 
-### **Endpoints** 
-The endpoints below supports historical data<br/>
-1. `/api/getFactoryAPYs?block={block_number}`
+### **Endpoints**
+
+The endpoints below support historical data<br/>
+
+#### 1. `/api/getFactoryAPYs?block={block_number}`
+
     ```
     "poolDetails": [
       {
@@ -44,7 +43,9 @@ The endpoints below supports historical data<br/>
     "totalVolume": 20572200.081073303
 
     ```
-2. `/api/getTVL?block={block_number}`
+
+#### 2. `/api/getTVL?block={block_number}`
+
     ```
     tvl": 12376315054.757349,
     "usdTVL": 6831486622.154737,
@@ -75,7 +76,7 @@ The endpoints below supports historical data<br/>
       },
       ...
     ],
-    
+
     "sideTVLs": [
       {
         "chain": "Polygon",
@@ -85,10 +86,12 @@ The endpoints below supports historical data<br/>
     ],
     "sideChainTVL": 2782688533.573472,
     ```
-    #####  ⚠️⚠️⚠️`sideTVLs` and `sideChainTVL` always return __latest__ value ⚠️⚠️⚠️
+
+⚠️Currently `sideTVLs` and `sideChainTVL` always return **latest** value but we're working on it.
 
 ### **FYI**
+
 If you get a timeout error or error such as <br/>
 `"Error: Returned values aren't valid, did it run Out of Gas? You might also see this error if you are not using the correct ABI for the contract you are retrieving data from, requesting data from a block number that does not exist, or querying a node which is not fully synced."`
 <br/>
-Try higher block number!
+This problem is likely to have occurred because the pool didn't exist at the time of the block number, or because there was no specific smart contract. In order to solve this problem, request the block number when the pool exist.
